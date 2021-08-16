@@ -4,6 +4,8 @@ use App\Http\Controllers\DepartmentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Department;
+
 //use App\Models\User;
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +29,11 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard',compact('users'));
 })->name('dashboard');
 
-Route::get('/department/all',[DepartmentController::class,'Index'])->name('department');
-Route::post('/department/add',[DepartmentController::class,'Store'])->name('addDepartment');
+Route::middleware(['auth:sanctum', 'verified'])->group(function(){
+    Route::get('/department/all',[DepartmentController::class,'Index'])->name('department');
+    Route::post('/department/add',[DepartmentController::class,'Store'])->name('addDepartment');
+    Route::get('/department/edit/{id}',[DepartmentController::class,'edit']);
+    Route::post('/department/update/{id}',[DepartmentController::class,'update']);
+
+    Route::get('/department/softdelete/{id}',[DepartmentController::class,'softdelete']);
+});
